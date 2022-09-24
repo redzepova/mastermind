@@ -9,6 +9,7 @@ module Display
   def game_options
     puts "Select difficulty level. \n
         1 - Easy  2 - Medium  3 - Difficult"
+    return gets.chomp.to_i
   end
 
   def mode_selection
@@ -16,7 +17,7 @@ module Display
       1 - Code Maker  2 - Code Breaker"
   end
 
-  def start_game
+  def show_rules
     puts 'Would you like to see the game rules before we start? Y/N'
     answer = gets.chomp
     game_rules(answer)
@@ -37,7 +38,10 @@ code and return feedback for each digit of the code.
     [ X ] - Right digit, right spot
 
 For example, if the code is 12655, and the Code Breaker guesses 22456, the feedback would be:
-    [   ][ X ][   ][ X ][ O ]"
+    [   ][ X ][   ][ X ][ O ]
+    
+Now onto the game!
+"
   end
 end
 
@@ -79,9 +83,10 @@ class Game
   def initialize
     @player = Player.new(player_name, game_mode)
     @computer = Computer.new
-    start_game
+    show_rules
     level = game_options
     @turns = game_level(level)
+    puts "#{@turns} turns"
 
   end
 end

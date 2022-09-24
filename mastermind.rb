@@ -43,6 +43,17 @@ For example, if the code is 12655, and the Code Breaker guesses 22456, the feedb
 Now onto the game!
 "
   end
+
+  def guess_text
+    puts "Enter your code. Codes must be 6 digits long, and can use whole numbers between 1-6"
+  end
+end
+
+## game play
+module PlayRound
+  def make_guess_human()
+
+  end
 end
 
 ## Game set-up functions, gets player, basic game info
@@ -86,14 +97,15 @@ class Game
     show_rules
     level = game_options
     @turns = game_level(level)
-    puts "#{@turns} turns"
+    puts "Player is #{@player.mode}"
 
   end
 end
 
 # #This is the human player. Can be codemaker or breaker
 class Player
-  attr_accessor :name
+  include PlayRound
+  attr_accessor :name, :mode
 
   def initialize(name, mode)
     @name = name
@@ -111,9 +123,7 @@ class Computer
   end
 end
 
-## each turn will take place here
-class Round
-end
+
 
 ## Logic module for computer guesses, eventually
 module Logic
@@ -125,7 +135,9 @@ end
 
 ## This is the code and guesses. I'm not sure if I really need this yet.
 class Code
-  def initialize; end
+  def initialize
+    @code = Array.new
+  end
 end
 
 Game.new

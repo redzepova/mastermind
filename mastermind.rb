@@ -9,7 +9,7 @@ module Display
   def game_options
     puts "Select difficulty level. \n
         1 - Easy  2 - Medium  3 - Difficult"
-    return gets.chomp.to_i
+    gets.chomp.to_i
   end
 
   def mode_selection
@@ -31,29 +31,27 @@ within the specified number of turns.
 
 Each code is 5 numbers long, and each number can be between 1-6. Numbers may repeat.
 
-Once the Code Maker has created a code, the Code Breaker must enter their guess. The Computer will analyze the 
-code and return feedback for each digit of the code. 
+Once the Code Maker has created a code, the Code Breaker must enter their guess. The Computer will analyze the
+code and return feedback for each digit of the code.
     [   ] - Not a match
     [ O ] - Right digit, but wrong spot
     [ X ] - Right digit, right spot
 
 For example, if the code is 12655, and the Code Breaker guesses 22456, the feedback would be:
     [   ][ X ][   ][ X ][ O ]
-    
+
 Now onto the game!
 "
   end
 
   def guess_text
-    puts "Enter your code. Codes must be 6 digits long, and can use whole numbers between 1-6"
+    puts 'Enter your code. Codes must be 6 digits long, and can use whole numbers between 1-6'
   end
 end
 
 ## game play
 module PlayRound
-  def make_guess_human()
-
-  end
+  def make_guess_human; end
 end
 
 ## Game set-up functions, gets player, basic game info
@@ -98,7 +96,6 @@ class Game
     level = game_options
     @turns = game_level(level)
     puts "Player is #{@player.mode}"
-
   end
 end
 
@@ -113,17 +110,14 @@ class Player
   end
 
   def role(choice)
-    choice == 1 ? "CM" : "CB"
+    choice == 1 ? 'CM' : 'CB'
   end
 end
 
 ## Computer player. Can create codes and make guesses
 class Computer
-  def initialize
-  end
+  def initialize; end
 end
-
-
 
 ## Logic module for computer guesses, eventually
 module Logic
@@ -136,7 +130,7 @@ end
 ## This is the code and guesses. I'm not sure if I really need this yet.
 class Code
   def initialize
-    @code = Array.new
+    @code = []
   end
 end
 

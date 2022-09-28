@@ -41,7 +41,7 @@ Now onto the game!
   end
 
   def guess_text
-    puts 'Enter your code. Codes must be 6 digits long, and can use whole numbers between 1-6'
+    puts 'Enter your code. Codes must be 5 digits long, and can use whole numbers between 1-6'
   end
 
   def bad_choice
@@ -49,7 +49,7 @@ Now onto the game!
   end
 end
 
-## This is the code and guesses. I'm not sure if I really need this yet.
+## Code and guesses
 class Code
   include Display
   attr_accessor :code
@@ -62,6 +62,7 @@ class Code
   def add_digit(digit)
     if digit.positive? && digit < 7
       @code.append(digit)
+      puts @code.to_s
     else
       bad_choice
     end
@@ -104,14 +105,12 @@ class Game
     show_rules
     @mode = HumanCodeBreak.new
     @turns = game_level(game_options)
-    puts "turns: #{@turns}"
     @master_code = Code.new("CM")
   end
 
   def play_round
     @mode.make_guess
     @turns += -1
-    puts "Turns now: #{@turns}"
   end
 
   def play_game

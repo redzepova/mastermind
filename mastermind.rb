@@ -2,10 +2,6 @@
 
 ## module to display all text
 module Display
-  def ask_player_name
-    puts "What's your name, Player?"
-  end
-
   def game_options
     puts "Select difficulty level. \n
         1 - Easy  2 - Medium  3 - Difficult"
@@ -47,11 +43,34 @@ Now onto the game!
   def guess_text
     puts 'Enter your code. Codes must be 6 digits long, and can use whole numbers between 1-6'
   end
+
+  def bad_choice
+    puts 'You must select a number from 1 -6. Try again.'
+  end
 end
 
-## game play
-module PlayRound
-  def make_guess_human; end
+## This is the code and guesses. I'm not sure if I really need this yet.
+class Code
+  include Display
+  attr_accessor :code
+  CHOICES = [1,2,3,4,5,6]
+
+  def initialize(mode = "CB")
+    mode == "CB"? @code = [] : create_random_code
+  end 
+
+  def add_digit(digit)
+    if digit.positive? && digit < 7
+      @code.append(digit)
+    else
+      bad_choice
+    end
+  end
+
+  def create_random_code
+   @code = CHOICES.repeated_permutation(5).to_a.sample
+   puts @code.to_s
+  end
 end
 
 ## Game set-up functions, gets player, basic game info
@@ -69,16 +88,8 @@ module GameSetup
             end
   end
 
-  def player_name
-    ask_player_name
-    name = gets.chomp
-    puts "Welcome to Mastermind, #{name}!"
-    name
-  end
-
   def game_mode
     mode_selection
-    choice = gets.chomp.to_i
   end
 end
 
@@ -87,26 +98,41 @@ class Game
   include Display
   include GameSetup
 
-  attr_accessor :turns
+  attr_accessor :mode
 
   def initialize
-    @player = Player.new(player_name, game_mode)
-    @computer = Computer.new
     show_rules
-    level = game_options
-    @turns = game_level(level)
-    puts "Player is #{@player.mode}"
+    @mode = HumanCodeBreak.new
+    @turns = game_level(game_options)
+    puts "turns: #{@turns}"
+    @master_code = Code.new("CM")
+  end
+
+  def play_round
+    @mode.make_guess
+    @turns += -1
+    puts "Turns now: #{@turns}"
+  end
+
+  def play_game
+    @mode.make_guess
+    play_round until @mode.guess.code == @master_code.code || @turns == 0
   end
 end
 
 # #This is the human player. Can be codemaker or breaker
-class Player
-  include PlayRound
-  attr_accessor :name, :mode
+class HumanCodeBreak
+  include Display
+  attr_accessor :guess
 
-  def initialize(name, mode)
-    @name = name
-    @mode = role(mode)
+  def initialize; end
+
+  def make_guess
+    @guess = Code.new
+    while @guess.code.length < 5
+      guess_text
+      @guess.add_digit(gets.chomp.to_i)
+    end
   end
 
   def role(choice)
@@ -115,7 +141,7 @@ class Player
 end
 
 ## Computer player. Can create codes and make guesses
-class Computer
+class ComputerCodeBreak
   def initialize; end
 end
 
@@ -127,11 +153,4 @@ end
 class Feedback
 end
 
-## This is the code and guesses. I'm not sure if I really need this yet.
-class Code
-  def initialize
-    @code = []
-  end
-end
-
-Game.new
+Game.new.play_game

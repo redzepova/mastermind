@@ -53,24 +53,22 @@ end
 class Code
   include Display
   attr_accessor :code
-  CHOICES = [1,2,3,4,5,6]
 
-  def initialize(mode = "CB")
-    mode == "CB"? @code = [] : create_random_code
-  end 
+  CHOICES = [1, 2, 3, 4, 5, 6].freeze
 
-  def add_digit(digit)
-    if digit.positive? && digit < 7
-      @code.append(digit)
-      puts @code.to_s
-    else
-      bad_choice
-    end
+  def initialize(mode = 'CB')
+    mode == 'CB' ? get_code : create_random_code
+  end
+
+  def get_code
+    guess_text
+    @code = gets.chomp.split(//).map(&:to_i)
+    puts @code.to_s
   end
 
   def create_random_code
-   @code = CHOICES.repeated_permutation(5).to_a.sample
-   puts @code.to_s
+    @code = CHOICES.repeated_permutation(5).to_a.sample
+    puts @code.to_s
   end
 end
 
@@ -105,7 +103,7 @@ class Game
     show_rules
     @mode = HumanCodeBreak.new
     @turns = game_level(game_options)
-    @master_code = Code.new("CM")
+    @master_code = Code.new('CM')
   end
 
   def play_round
@@ -115,7 +113,7 @@ class Game
 
   def play_game
     @mode.make_guess
-    play_round until @mode.guess.code == @master_code.code || @turns == 0
+    play_round until @mode.guess.code == @master_code.code || @turns.zero?
   end
 end
 
@@ -128,10 +126,6 @@ class HumanCodeBreak
 
   def make_guess
     @guess = Code.new
-    while @guess.code.length < 5
-      guess_text
-      @guess.add_digit(gets.chomp.to_i)
-    end
   end
 
   def role(choice)

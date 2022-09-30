@@ -39,8 +39,11 @@ module Display
   "
   end
 
-  def guess_text
-    puts 'Enter your code. Codes must be 5 digits long, and can use whole numbers between 1-6'
+  def create_code_text(message)
+    {
+      'guess' => 'Enter your best guess. Your guess must be 5 digits, 1-6.',
+      'code' => 'Enter a code for the computer to try to guess'
+    }[message]
   end
 
   def bad_choice

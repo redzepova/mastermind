@@ -4,20 +4,22 @@ require_relative 'display'
 require_relative 'game_setup'
 require_relative 'feedback'
 require_relative 'human_codebreak'
+require_relative 'code'
+require_relative 'computer_codebreak'
 
 # Where the game takes place
-
 class Game
   include Display
   include GameSetup
+  include Code
 
   attr_accessor :mode
 
   def initialize
     show_rules
-    @mode = HumanCodeBreak.new
+    @mode = game_mode
     @turns = game_level(game_options)
-    @master_code = Code.new('CM')
+    @master_code = create_secret_code(@mode)
   end
 
   def play_round
